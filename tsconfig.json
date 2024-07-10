@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "outDir": "./build",
     "moduleResolution": "node",
     "allowJs": false,

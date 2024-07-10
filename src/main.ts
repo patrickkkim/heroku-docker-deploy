@@ -6,6 +6,7 @@ import { releaseDockerContainer } from './heroku/release_docker_container';
 import assert from 'assert';
 import { assertDirExists, assertFileExists, getCwdFromPath } from './utils';
 import path from 'path';
+import { sendEnv } from './heroku/send_env_variables';
 
 const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
 const DEFAULT_PROCESS_TYPE = 'web';
@@ -20,6 +21,12 @@ const DEFAULT_DOCKER_OPTIONS = '';
     const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
     const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
     const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
+
+    const dbHost = core.getInput('db_host') || ''
+    const dbName = core.getInput('db_name') || ''
+    const dbUsername = core.getInput('db_username') || ''
+    const dbPassword = core.getInput('db_password') || ''
+    const fs = core.getInput('fs_api_key') || ''
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');
@@ -38,6 +45,16 @@ const DEFAULT_DOCKER_OPTIONS = '';
       cwd,
     });
     if (!logged) return;
+
+    const envSent = await sendEnv({
+      dbHost,
+      dbName,
+      dbUsername,
+      dbPassword,
+      fs,
+      herokuAppName
+    });
+    if (!envSent) return;
 
     const built = await buildDockerImage({
       dockerfileName,

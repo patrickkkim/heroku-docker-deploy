@@ -1,5 +1,5 @@
-name: "Build, Push and Release a Docker container to Heroku."
-author: "Kamil Klyta"
+name: "Build, Push and Release a Docker container to Heroku + Env sending"
+author: "Patrick"
 description: "Build, Push and Release a Docker container to Heroku."
 inputs:
   heroku_app_name:
